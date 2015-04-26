@@ -26,18 +26,30 @@ public class PlayerController : MonoBehaviour {
 	}
 
     void FixedUpdate() {
+        h = Input.GetAxisRaw(hAxis);
+        if (h != 0)
+        {
+            transform.localScale = new Vector3(h, transform.localScale.y);
+        }
+
         if (OnGround())
         {
             // On the ground
-            h = Input.GetAxisRaw(hAxis);
             if (h != 0)
             {
                 rig.velocity = new Vector2(rig.gravityScale * h * hspd, rig.velocity.y);
-                transform.localScale = new Vector3(h, transform.localScale.y);
             }
 
             if (Input.GetButtonDown(jumpButton)) {
-                rig.velocity = new Vector2(rig.velocity.x, rig.gravityScale * 3.5f);
+                rig.AddForce(new Vector2(0, rig.gravityScale * 3.5f), ForceMode2D.Impulse);
+            }
+        }
+        else
+        {
+            float dir = Mathf.Sign(rig.velocity.x);
+            if (h != 0 && h != dir)
+            {
+                rig.velocity = new Vector2(rig.gravityScale * dir * hspd * 0.5f, rig.velocity.y);
             }
         }
 
