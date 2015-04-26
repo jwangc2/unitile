@@ -171,7 +171,7 @@ public class UTWindow : EditorWindow {
     public Vector3 SnapPos(Vector3 pos)
     {
         float sx = Mathf.Floor(pos.x / gridSize) * gridSize;
-        float sy = Mathf.Floor(pos.y / gridSize) * gridSize;
+        float sy = Mathf.Ceil(pos.y / gridSize) * gridSize;
         return new Vector3(sx, sy);
     }
 
