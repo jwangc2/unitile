@@ -14,7 +14,9 @@ public class UTWindow : EditorWindow {
     private int roomWidth;
     private int roomHeight;
     private float alpha;
+    
     private bool placePrefab;
+    private bool snapToPlace;
     private Object prefabObj;
     private string prefabStatus = "Error: No prefab selected.";
     private GameObject tempPlaceGO;
@@ -58,6 +60,7 @@ public class UTWindow : EditorWindow {
         }
         
         placePrefab = false;
+        snapToPlace = true;
         prefabObj = null;
         tempPlaceGO = null;
         depth = -10;
@@ -67,19 +70,21 @@ public class UTWindow : EditorWindow {
     }
 
 	void OnGUI() {
-        roomWidthFV = EditorGUILayout.IntField("Room Width:", roomWidthFV);
+        roomWidthFV = EditorGUILayout.IntField("Room Width", roomWidthFV);
         roomWidthFV = Mathf.Max(0, roomWidthFV);
         
-        roomHeightFV = EditorGUILayout.IntField("Room Height:", roomHeightFV);
+        roomHeightFV = EditorGUILayout.IntField("Room Height", roomHeightFV);
         roomHeightFV = Mathf.Max(0, roomHeightFV);
         
-        gridSizeFV = EditorGUILayout.IntField("Grid Size:", gridSizeFV);
+        gridSizeFV = EditorGUILayout.IntField("Grid Size", gridSizeFV);
         gridSizeFV = Mathf.Max(gridSizeFV, 1);
         
         EditorGUILayout.LabelField("Grid Transparency");
         alphaFV = EditorGUILayout.Slider(alphaFV, 0, 1);
         
-        placePrefab = EditorGUILayout.Toggle("Place Prefab:", placePrefab);
+        snapToPlace = EditorGUILayout.Toggle("Snap to Place", snapToPlace);
+        
+        placePrefab = EditorGUILayout.Toggle("Place Prefab", placePrefab);
         
         Object newObj = EditorGUILayout.ObjectField("Instance:", prefabObj, typeof(GameObject), false);
         if (newObj != prefabObj) 
@@ -207,11 +212,14 @@ public class UTWindow : EditorWindow {
                 break;
             
             case EventType.MouseUp:
-                foreach (GameObject go in Selection.objects)
+                if (snapToPlace)
                 {
-                    if (go.GetComponent<SpriteRenderer>())
+                    foreach (GameObject go in Selection.objects)
                     {
-                        go.transform.position = SnapPos(go.transform.position);
+                        if (go.GetComponent<SpriteRenderer>())
+                        {
+                            go.transform.position = SnapPos(go.transform.position);
+                        }
                     }
                 }
                 break;
