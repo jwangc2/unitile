@@ -8,12 +8,17 @@ public class PlayerController : MonoBehaviour {
     public string hAxis;
     public string jumpButton;
     public string attackButton;
+
+    public DamageMask[] attackSideMasks;
+
     private Rigidbody2D rig;
     private Animator anim;
     private float h;
+    private int facing;
 
 	// Use this for initialization
 	void Start () {
+        facing = 1;
         rig = this.gameObject.GetComponent<Rigidbody2D>();
         anim = this.gameObject.GetComponent<Animator>();
 	}
@@ -27,6 +32,7 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate() {
         h = Input.GetAxisRaw(hAxis);
+        float dir = Mathf.Sign(rig.velocity.x);
         if (h != 0)
         {
             transform.localScale = new Vector3(h, transform.localScale.y);
@@ -46,11 +52,16 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
-            float dir = Mathf.Sign(rig.velocity.x);
             if (h != 0 && h != dir)
             {
                 rig.velocity = new Vector2(rig.gravityScale * dir * hspd * 0.5f, rig.velocity.y);
             }
+        }
+
+        dir = Mathf.Sign(rig.velocity.x);
+        if (dir != 0)
+        {
+            facing = (int)dir;
         }
 
     }
@@ -61,6 +72,50 @@ public class PlayerController : MonoBehaviour {
         }
 
         return false;
+    }
+
+    public void React(DamageMask dm)
+    {
+        Debug.LogWarning("Hit!");
+        float dir = Mathf.Sign(transform.position.x - dm.transform.position.x);
+        Vector2 fdir = dm.direction.normalized * dir + Vector2.up * 0.5f;
+        rig.AddForce(fdir * dm.impulseMag * rig.gravityScale, ForceMode2D.Impulse);
+    }
+
+    void EnableAttackMask(int frame) {
+        if (frame >= 0 && frame < attackSideMasks.Length)
+        {
+            DamageMask dm = attackSideMasks[frame];
+            if (dm)
+            {
+                dm.gameObject.SetActive(true);
+                dm.owner = this;
+                //dm.direction = Vector2.right * facing;
+            }
+        }
+    }
+
+    void DisableAttackMask(int frame) {
+        if (frame >= 0 && frame < attackSideMasks.Length)
+        {
+            DamageMask dm = attackSideMasks[frame];
+            if (dm)
+            {
+                dm.gameObject.SetActive(false);
+                dm.owner = this;
+            }
+        }
+    }
+
+    void DisableAttackAll() {
+        foreach (DamageMask dm in attackSideMasks)
+        {
+            if (dm)
+            {
+                dm.gameObject.SetActive(false);
+                dm.owner = this;
+            }
+        }
     }
 
 }
