@@ -3,7 +3,9 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
-    public TriggerCheck groundCheck;
+    public Vector2 groundMaskCenter;
+    public Vector2 groundMaskSize;
+    public string groundLayerName = "Ground";
     public float hspd = 10;
     public string hAxis;
     public string jumpButton;
@@ -15,18 +17,22 @@ public class PlayerController : MonoBehaviour {
     private Animator anim;
     private float h;
     private int facing;
+    private int groundLayer;
+    private bool onGround;
 
 	// Use this for initialization
 	void Start () {
+        onGround = UpdateOnGround();
         facing = 1;
         rig = this.gameObject.GetComponent<Rigidbody2D>();
         anim = this.gameObject.GetComponent<Animator>();
+        groundLayer = LayerMask.NameToLayer(groundLayerName);
 	}
 	
 	// Update is called once per frame
 	void Update () {
         anim.SetInteger("h", (int)h);
-        anim.SetBool("OnGround", OnGround());
+        anim.SetBool("OnGround", onGround);
         anim.SetBool("Attack", Input.GetButton(attackButton));
 	}
 
@@ -38,7 +44,7 @@ public class PlayerController : MonoBehaviour {
             transform.localScale = new Vector3(h, transform.localScale.y);
         }
 
-        if (OnGround())
+        if (onGround)
         {
             // On the ground
             if (h != 0)
@@ -47,38 +53,42 @@ public class PlayerController : MonoBehaviour {
             }
 
             if (Input.GetButtonDown(jumpButton)) {
-                rig.AddForce(new Vector2(0, rig.gravityScale * 3.5f), ForceMode2D.Impulse);
+                rig.AddForce(new Vector2(0, rig.mass * rig.gravityScale * 3.5f), ForceMode2D.Impulse);
             }
         }
         else
         {
-            if (h != 0 && h != dir)
+            dir = Extensions.SignZero(rig.velocity.x);
+            if (h != 0 && h != dir && dir != 0)
             {
-                rig.velocity = new Vector2(rig.gravityScale * dir * hspd * 0.5f, rig.velocity.y);
+                rig.velocity = new Vector2(rig.velocity.x * 0.8f, rig.velocity.y);
             }
         }
 
-        dir = Mathf.Sign(rig.velocity.x);
+        dir = Extensions.SignZero(rig.velocity.x);
         if (dir != 0)
         {
             facing = (int)dir;
         }
 
+        UpdateOnGround();
     }
 
-    bool OnGround() {
-        if (groundCheck) {
-            return groundCheck.hit != null;
-        }
-
-        return false;
+    bool UpdateOnGround() {
+        LayerMask groundMask = 1 << groundLayer;
+        Vector2 pos = (Vector2)transform.position + groundMaskCenter;
+        Vector2 halfSize = groundMaskSize * 0.5f;
+        Collider2D hit = Physics2D.OverlapArea(pos - halfSize, pos + halfSize, groundMask);
+        onGround = hit;
+        return onGround;
     }
 
     public void React(DamageMask dm)
     {
         Debug.LogWarning("Hit!");
         float dir = Mathf.Sign(transform.position.x - dm.transform.position.x);
-        Vector2 fdir = dm.direction.normalized * dir + Vector2.up * 0.5f;
+        Vector2 fdir = dm.direction.normalized;
+        fdir.x = fdir.x * dir;
         rig.AddForce(fdir * dm.impulseMag * rig.gravityScale, ForceMode2D.Impulse);
     }
 
@@ -116,6 +126,12 @@ public class PlayerController : MonoBehaviour {
                 dm.owner = this;
             }
         }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireCube(transform.position + (Vector3)groundMaskCenter, new Vector3(groundMaskSize.x, groundMaskSize.y, 1f));
     }
 
 }

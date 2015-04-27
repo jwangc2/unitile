@@ -98,7 +98,7 @@ public class UTWindow : EditorWindow {
                 GameObject GO = (GameObject)newObj;
                 if (GO.GetComponent<SpriteRenderer>())
                 {
-                    prefabStatus = "Gucci.";
+                    prefabStatus = "We gucci.";
                     prefabObj = newObj;
                 }
                 else
