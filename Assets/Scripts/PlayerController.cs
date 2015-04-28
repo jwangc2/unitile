@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour {
     public Vector2 groundMaskCenter;
     public Vector2 groundMaskSize;
     public string groundLayerName = "Ground";
+    public float pixPerfThresh = 2f;
     public float hspd = 10;
     public string hAxis;
     public string jumpButton;
@@ -71,16 +72,45 @@ public class PlayerController : MonoBehaviour {
             facing = (int)dir;
         }
 
+        // Raycast for all
         UpdateOnGround();
     }
 
     bool UpdateOnGround() {
-        LayerMask groundMask = 1 << groundLayer;
-        Vector2 pos = (Vector2)transform.position + groundMaskCenter;
-        Vector2 halfSize = groundMaskSize * 0.5f;
-        Collider2D hit = Physics2D.OverlapArea(pos - halfSize, pos + halfSize, groundMask);
-        onGround = hit;
+        // Ensure that the rig already exists...
+        if (rig)
+        {
+            // Settings
+            LayerMask groundMask = 1 << groundLayer;
+            float vy = rig.velocity.y * Time.fixedDeltaTime;
+            float dist = Mathf.Abs(vy);
+
+            // Pixel-perfect vertical collision
+            if (vy * -1f > pixPerfThresh && dist > 0)
+            {
+                Vector2 pos = (Vector2)transform.position;
+                RaycastHit2D hitRay = Physics2D.BoxCast(pos, groundMaskSize, 0f, Vector2.up * -1f, dist, groundMask);
+                if (hitRay.transform)
+                {
+                    transform.position = new Vector2(transform.position.x, hitRay.point.y + 1f);
+                    rig.velocity = new Vector2(rig.velocity.x, 0f);
+                }
+                onGround = hitRay.transform;
+            }
+            else
+            {
+                // Check if we are currently touching the ground
+                Vector2 pos = (Vector2)transform.position + groundMaskCenter;
+                Vector2 halfSize = groundMaskSize * 0.5f;
+                Collider2D hitCol = Physics2D.OverlapArea(pos - halfSize, pos + halfSize, groundMask);
+                onGround = hitCol;
+            }
+
+        }
+
+
         return onGround;
+
     }
 
     public void React(DamageMask dm)

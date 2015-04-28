@@ -1,0 +1,231 @@
+fileFormatVersion: 2
+guid: 41955caa4590ebd459ebf4abeabd1bb5
+timeCreated: 1430156444
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: KnifeAttackFinal_strip16_0
+    21300002: KnifeAttackFinal_strip16_1
+    21300004: KnifeAttackFinal_strip16_2
+    21300006: KnifeAttackFinal_strip16_3
+    21300008: KnifeAttackFinal_strip16_4
+    21300010: KnifeAttackFinal_strip16_5
+    21300012: KnifeAttackFinal_strip16_6
+    21300014: KnifeAttackFinal_strip16_7
+    21300016: KnifeAttackFinal_strip16_8
+    21300018: KnifeAttackFinal_strip16_9
+    21300020: KnifeAttackFinal_strip16_10
+    21300022: KnifeAttackFinal_strip16_11
+    21300024: KnifeAttackFinal_strip16_12
+    21300026: KnifeAttackFinal_strip16_13
+    21300028: KnifeAttackFinal_strip16_14
+    21300030: KnifeAttackFinal_strip16_15
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 1
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: KnifeAttackFinal_strip16_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_1
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_2
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_3
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_4
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_5
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_6
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_7
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_8
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_9
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_10
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_11
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_12
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_13
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_14
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: KnifeAttackFinal_strip16_15
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 56
+        height: 48
+      alignment: 9
+      pivot: {x: .400000006, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

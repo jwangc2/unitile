@@ -1,17 +1,14 @@
 fileFormatVersion: 2
-guid: 79ee341b6dda56b4f8faafb99e6092e2
-timeCreated: 1430023391
+guid: 9469f21459d30f64893abf10ec9a4476
+timeCreated: 1430025132
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: spr_char_run_strip4_0
-    21300002: spr_char_run_strip4_1
-    21300004: spr_char_run_strip4_2
-    21300006: spr_char_run_strip4_3
+    21300000: jump_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -30,7 +27,7 @@ TextureImporter:
   cubemapConvolutionSteps: 8
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
     filterMode: 0
@@ -53,40 +50,10 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: spr_char_run_strip4_0
+    - name: jump_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: spr_char_run_strip4_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: spr_char_run_strip4_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: spr_char_run_strip4_3
-      rect:
-        serializedVersion: 2
-        x: 96
         y: 0
         width: 32
         height: 32
