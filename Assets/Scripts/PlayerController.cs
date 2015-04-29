@@ -11,8 +11,15 @@ public class PlayerController : MonoBehaviour {
     public string hAxis;
     public string jumpButton;
     public string attackButton;
+    public string shieldButton;
 
     public DamageMask[] attackSideMasks;
+    public GameObject shieldGO;
+
+    public AnimationClip idleClip;
+    public AnimationClip jumpClip;
+    public AnimationClip runClip;
+    public AnimationClip shieldClip;
 
     private Rigidbody2D rig;
     private Animator anim;
@@ -20,11 +27,15 @@ public class PlayerController : MonoBehaviour {
     private int facing;
     private int groundLayer;
     private bool onGround;
+    private bool tryShielding; // Whether the player is trying to shield
+    private bool isShielding;  // Whether the shield is actually on
 
 	// Use this for initialization
 	void Start () {
         onGround = UpdateOnGround();
         facing = 1;
+        isShielding = false;
+        tryShielding = false;
         rig = this.gameObject.GetComponent<Rigidbody2D>();
         anim = this.gameObject.GetComponent<Animator>();
         groundLayer = LayerMask.NameToLayer(groundLayerName);
@@ -35,44 +46,54 @@ public class PlayerController : MonoBehaviour {
         anim.SetInteger("h", (int)h);
         anim.SetBool("OnGround", onGround);
         anim.SetBool("Attack", Input.GetButton(attackButton));
+        anim.SetBool("Shield", tryShielding);
 	}
 
     void FixedUpdate() {
-        h = Input.GetAxisRaw(hAxis);
-        float dir = Mathf.Sign(rig.velocity.x);
-        if (h != 0)
-        {
-            transform.localScale = new Vector3(h, transform.localScale.y);
-        }
+        AnimatorClipInfo[] info = anim.GetCurrentAnimatorClipInfo(0);
 
+        // Determine input and current conditions
+        h = Input.GetAxisRaw(hAxis);
+        bool hasControl = true;
+
+        // Essentially a control lock
+        if (h != 0)
+            hasControl = (ClipMatches(info, idleClip) || ClipMatches(info, jumpClip) || ClipMatches(info, runClip));
+
+        float dir = Mathf.Sign(rig.velocity.x);
+
+        // Face in the direction going if input is provided
+        if (h != 0 && hasControl)
+            transform.localScale = new Vector3(h, transform.localScale.y);
+
+        // Ground-based moves
         if (onGround)
         {
-            // On the ground
-            if (h != 0)
-            {
+            // Run / Walk
+            if (h != 0 && hasControl)
                 rig.velocity = new Vector2(rig.gravityScale * h * hspd, rig.velocity.y);
-            }
 
-            if (Input.GetButtonDown(jumpButton)) {
+            // Jump
+            if (Input.GetButtonDown(jumpButton) && hasControl) {
                 rig.AddForce(new Vector2(0, rig.mass * rig.gravityScale * 3.5f), ForceMode2D.Impulse);
             }
+            else if (Input.GetButton(shieldButton) && hasControl) {
+                tryShielding = true;
+            }
+            else if (Input.GetButtonUp(shieldButton))
+                tryShielding = false;
         }
         else
         {
+            // Control movemement mid-air
             dir = Extensions.SignZero(rig.velocity.x);
-            if (h != 0 && h != dir && dir != 0)
+            if (h != 0 && h != dir && dir != 0 && hasControl)
             {
                 rig.velocity = new Vector2(rig.velocity.x * 0.8f, rig.velocity.y);
             }
         }
 
-        dir = Extensions.SignZero(rig.velocity.x);
-        if (dir != 0)
-        {
-            facing = (int)dir;
-        }
-
-        // Raycast for all
+        // Ground-specific collisions
         UpdateOnGround();
     }
 
@@ -108,18 +129,58 @@ public class PlayerController : MonoBehaviour {
 
         }
 
-
         return onGround;
 
     }
 
+    // Method for reacting to damage-mask collisions. This is initiated and registered by the damage-mask itself.
     public void React(DamageMask dm)
     {
         Debug.LogWarning("Hit!");
         float dir = Mathf.Sign(transform.position.x - dm.transform.position.x);
+        float impulseMag = dm.impulseMag;
         Vector2 fdir = dm.direction.normalized;
+
+        if (isShielding) {
+            fdir = Vector2.right;
+            impulseMag = 0.5f * rig.mass;
+        }
+
+
         fdir.x = fdir.x * dir;
-        rig.AddForce(fdir * dm.impulseMag * rig.gravityScale, ForceMode2D.Impulse);
+        rig.AddForce(fdir * impulseMag * rig.gravityScale, ForceMode2D.Impulse);
+    }
+
+    // Determine whether a clip matches one in the clip info (used for checking the current state)
+    bool ClipMatches(AnimatorClipInfo[] info, AnimationClip check)
+    {
+        foreach (AnimatorClipInfo clipInfo in info)
+        {
+            if (clipInfo.clip == check)
+                return true;
+        }
+        return false;
+    }
+
+    void EnableShield()
+    {
+        SetShield(true);
+    }
+
+    void DisableShield()
+    {
+        SetShield(false);
+    }
+
+    void SetShield(bool state)
+    {
+        if (!isShielding && isShielding != state)
+        {
+            rig.velocity = Vector2.zero;
+        }
+        isShielding = state;
+        if (shieldGO)
+            shieldGO.SetActive(tryShielding);
     }
 
     void EnableAttackMask(int frame) {
