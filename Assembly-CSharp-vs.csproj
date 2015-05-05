@@ -46,13 +46,20 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Camera2D.cs" />
-     <Compile Include="Assets\Scripts\DamageMask.cs" />
-     <Compile Include="Assets\Scripts\Extensions.cs" />
-     <Compile Include="Assets\Scripts\PlacerScript.cs" />
-     <Compile Include="Assets\Scripts\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\TriggerCheck.cs" />
-     <Compile Include="Assets\Scripts\UTWindow.cs" />
+     <Compile Include="Assets\Scripts\Controls\ControlItem.cs" />
+     <Compile Include="Assets\Scripts\Controls\ControlManager.cs" />
+     <Compile Include="Assets\Scripts\Controls\Joystick.cs" />
+     <Compile Include="Assets\Scripts\Game\Camera2D.cs" />
+     <Compile Include="Assets\Scripts\Game\DamageMask.cs" />
+     <Compile Include="Assets\Scripts\Game\Extensions.cs" />
+     <Compile Include="Assets\Scripts\Game\InputManager.cs" />
+     <Compile Include="Assets\Scripts\Game\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\Game\TriggerCheck.cs" />
+     <Compile Include="Assets\Thrust\Singleton\Example\MyExampleSingleton.cs" />
+     <Compile Include="Assets\Thrust\Singleton\Example\TestGUI.cs" />
+     <Compile Include="Assets\Thrust\Singleton\PersistentSingleton.cs" />
+     <Compile Include="Assets\Thrust\Singleton\Singleton.cs" />
+     <None Include="Assets\Thrust\Singleton\__README__.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity-5.0.1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
