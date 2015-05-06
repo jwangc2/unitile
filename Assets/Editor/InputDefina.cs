@@ -53,7 +53,7 @@ public static class InputDefina {
         return new InputAxis() 
         { 
             name = "myPad" + gamepadID + "B" + buttonID.ToString(),
-            positiveButton = "joystick button " + buttonID,
+            positiveButton = "joystick " + gamepadID + " button " + buttonID,
             gravity = 1000f,
             dead = 0.01f,
             sensitivity = 1000f,
