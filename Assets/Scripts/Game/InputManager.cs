@@ -14,18 +14,18 @@ public enum ButtonType {
 
 public struct JoyValue{
     public int joyID;
-    public int dir;
-
-    public JoyValue(int joyID, int dir)
-    {
-        this.joyID = joyID;
-        this.dir = dir;
-    }
+    public bool inverted;
 
     public JoyValue(int joyID)
     {
         this.joyID = joyID;
-        this.dir = 1;
+        this.inverted = false;
+    }
+
+    public JoyValue(int joyID, bool inverted)
+    {
+        this.joyID = joyID;
+        this.inverted = inverted;
     }
 }
 
@@ -45,10 +45,10 @@ public class InputManager : PersistentSingleton<InputManager> {
 
     void Start()
     {
-        SetupInputs();
+        ResetInputs();
     }
 
-    void SetupInputs()
+    public void ResetInputs()
     {
         // Define empty dictionaries
         joyMaps = new Dictionary<JoystickType, JoyValue>[numGamepads];
@@ -62,11 +62,11 @@ public class InputManager : PersistentSingleton<InputManager> {
         Dictionary<JoystickType, JoyValue> defaultJoyMap = new Dictionary<JoystickType, JoyValue>();
         
         defaultJoyMap.Add(JoystickType.ControlStickH, new JoyValue(1));
-        defaultJoyMap.Add(JoystickType.ControlStickV, new JoyValue(2, -1));        
+        defaultJoyMap.Add(JoystickType.ControlStickV, new JoyValue(2, true));        
         defaultJoyMap.Add(JoystickType.DPadH, new JoyValue(7));        
         defaultJoyMap.Add(JoystickType.DPadV, new JoyValue(8));        
         defaultJoyMap.Add(JoystickType.CStickH, new JoyValue(6));        
-        defaultJoyMap.Add(JoystickType.CStickV, new JoyValue(3, -1));
+        defaultJoyMap.Add(JoystickType.CStickV, new JoyValue(3, true));
 
         // Default Button Mapping
         Dictionary<ButtonType, int> defaultBtnMap = new Dictionary<ButtonType, int>();
@@ -97,14 +97,14 @@ public class InputManager : PersistentSingleton<InputManager> {
                         dir = PlayerPrefs.GetInt(key + "Dir");
                     }
 
-                    (joyMaps[g])[jt] = new JoyValue(PlayerPrefs.GetInt(key), dir);
+                    (joyMaps[g])[jt] = new JoyValue(PlayerPrefs.GetInt(key), dir < 0);
                 }
             }
 
             btnMaps[g] = new Dictionary<ButtonType, int>(defaultBtnMap);
             foreach (ButtonType bt in buttonTypes)
             {
-                string key = FormatBtnKey(g, bt);
+                string key = FormatBtnKey(g + 1, bt);
                 if (PlayerPrefs.HasKey(key))
                 {
                     (btnMaps[g])[bt] = PlayerPrefs.GetInt(key);
@@ -114,17 +114,18 @@ public class InputManager : PersistentSingleton<InputManager> {
     }
 
     /* Handles the internal naming of axes */
-    private string FormatJoy(int gamepadID, JoystickType joyKey)
+    public string FormatJoy(int gamepadID, JoystickType joyKey)
     {
-        return "myPad" + gamepadID + "J" + (joyMaps[gamepadID - 1])[joyKey].joyID;
+        JoyValue jv = (joyMaps[gamepadID - 1])[joyKey];
+        return FormatJoy(gamepadID, jv.joyID, jv.inverted);
     }
 
-    private string FormatJoy(int gamepadID, int joyID)
+    private string FormatJoy(int gamepadID, int joyID, bool inverted)
     {
-        return "myPad" + gamepadID + "J" + joyID;
+        return "myPad" + gamepadID + "J" + joyID + (inverted ? "-" : "+");
     }
 
-    private string FormatBtn(int gamepadID, ButtonType btnKey)
+    public string FormatBtn(int gamepadID, ButtonType btnKey)
     {
         return "myPad" + gamepadID + "B" + (btnMaps[gamepadID - 1])[btnKey];
     }
@@ -145,18 +146,29 @@ public class InputManager : PersistentSingleton<InputManager> {
     }
 
     /* Mutators that will edit the joymaps, and the player prefs respectively */
-    public void MapJoystick(int gamepadID, JoystickType joyKey, int joyID, int dir)
+    public void MapJoystick(int gamepadID, JoystickType joyKey, int joyID, bool inverted)
     {
-        (joyMaps[gamepadID - 1])[joyKey] = new JoyValue(joyID, dir);
-        string key = FormatJoyKey(gamepadID, joyKey);
-        PlayerPrefs.SetInt(key, joyID);
-        PlayerPrefs.SetInt(key + "Dir", dir);
-        Debug.Log("Set [" + key + "]");
+        (joyMaps[gamepadID - 1])[joyKey] = new JoyValue(joyID, inverted);
     }
 
     public void MapButton(int gamepadID, ButtonType btnKey, int btnID)
     {
         (btnMaps[gamepadID - 1])[btnKey] = btnID;
+
+    }
+
+    public void UpdateMappingJoystick(int gamepadID, JoystickType joyKey)
+    {
+        JoyValue joy = (joyMaps[gamepadID - 1])[joyKey];
+        string key = FormatJoyKey(gamepadID, joyKey);
+        PlayerPrefs.SetInt(key, joy.joyID);
+        PlayerPrefs.SetInt(key + "Dir", (joy.inverted ? -1 : 1));
+        Debug.Log("Set [" + key + "]");
+    }
+
+    public void UpdateMappingButton(int gamepadID, ButtonType btnKey)
+    {
+        int btnID = (btnMaps[gamepadID - 1])[btnKey];
         string key = FormatBtnKey(gamepadID, btnKey);
         PlayerPrefs.SetInt(key, btnID);
     }
@@ -175,13 +187,13 @@ public class InputManager : PersistentSingleton<InputManager> {
     public float GetAxisRaw(int gamepadID, JoystickType joyKey)
     {
         JoyValue jv = GetJoyValue(gamepadID, joyKey);
-        return GetAxisRaw(gamepadID, jv.joyID) * jv.dir;
+        return GetAxisRaw(gamepadID, jv.joyID, jv.inverted);
     }
 
     public float GetAxis(int gamepadID, JoystickType joyKey)
     {
         JoyValue jv = GetJoyValue(gamepadID, joyKey);
-        return GetAxis(gamepadID, jv.joyID) * jv.dir;
+        return GetAxis(gamepadID, jv.joyID, jv.inverted);
     }
 
     public bool GetButton(int gamepadID, ButtonType btnKey)
@@ -200,14 +212,14 @@ public class InputManager : PersistentSingleton<InputManager> {
     }
 
     /* Handles ALL inputs, not just the internal GC style */
-    public float GetAxisRaw(int gamepadID, int joyID)
+    public float GetAxisRaw(int gamepadID, int joyID, bool inverted)
     {
-        return Input.GetAxisRaw(FormatJoy(gamepadID, joyID));
+        return Input.GetAxisRaw(FormatJoy(gamepadID, joyID, inverted));
     }
     
-    public float GetAxis(int gamepadID, int joyID)
+    public float GetAxis(int gamepadID, int joyID, bool inverted)
     {
-        return Input.GetAxis(FormatJoy(gamepadID, joyID));
+        return Input.GetAxis(FormatJoy(gamepadID, joyID, inverted));
     }
     
     public bool GetButton(int gamepadID, int btnID)

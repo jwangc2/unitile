@@ -7,4 +7,5 @@ public abstract class ControlItem : MonoBehaviour {
 
     public abstract bool CanUnfocus();
     public abstract void UpdateMapping();
+    public abstract void Calibrate();
 }

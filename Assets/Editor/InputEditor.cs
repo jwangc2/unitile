@@ -58,12 +58,20 @@ public class InputEditor : EditorWindow {
     {
         // Rewrite the input manager
         int index = countMap["Starting Index"] - 1;
+
+        // Gamepad Specific
         for (int g = 1; g <= countMap["Gamepad Count"]; g ++)
         {
             for (int j = 1; j <= countMap["Joystick Count"]; j ++)
             {
-                InputAxis a = InputDefina.DefaultJoystick(g, j);
-                InputDefina.AddAxis(a, index);
+                // Normal
+                InputAxis a1 = InputDefina.DefaultJoystick(g, j, false);
+                InputDefina.AddAxis(a1, index);
+                index ++;
+
+                // Inverted
+                InputAxis a2 = InputDefina.DefaultJoystick(g, j, true);
+                InputDefina.AddAxis(a2, index);
                 index ++;
             }
             for (int b = 0; b < countMap["Button Count"]; b ++)

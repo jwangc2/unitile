@@ -34,14 +34,15 @@ public enum AxisType
 
 public static class InputDefina {
 
-    public static InputAxis DefaultJoystick(int gamepadID, int joystickID)
+    public static InputAxis DefaultJoystick(int gamepadID, int joystickID, bool inverted)
     {
         return new InputAxis() 
         { 
-            name = "myPad" + gamepadID + "J" + joystickID.ToString(),
+            name = "myPad" + gamepadID + "J" + joystickID.ToString() + (inverted ? "-" : "+"),
             gravity = 0f,
             dead = 0.2f,
             sensitivity = 3f,
+            invert = inverted,
             type = AxisType.JoystickAxis,
             axis = joystickID,
             joyNum = gamepadID,
@@ -50,10 +51,14 @@ public static class InputDefina {
 
     public static InputAxis DefaultButton(int gamepadID, int buttonID)
     {
+        string jID = gamepadID.ToString() + " ";
+        if (gamepadID <= 0)
+            jID = "";
+
         return new InputAxis() 
         { 
             name = "myPad" + gamepadID + "B" + buttonID.ToString(),
-            positiveButton = "joystick " + gamepadID + " button " + buttonID,
+            positiveButton = "joystick " + jID + "button " + buttonID,
             gravity = 1000f,
             dead = 0.01f,
             sensitivity = 1000f,

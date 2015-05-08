@@ -47,9 +47,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Controls\ControlButton.cs" />
+     <Compile Include="Assets\Scripts\Controls\ControlDisplay.cs" />
      <Compile Include="Assets\Scripts\Controls\ControlItem.cs" />
+     <Compile Include="Assets\Scripts\Controls\ControlJoystick.cs" />
      <Compile Include="Assets\Scripts\Controls\ControlManager.cs" />
-     <Compile Include="Assets\Scripts\Controls\Joystick.cs" />
+     <Compile Include="Assets\Scripts\Controls\StandaloneInputModuleExt.cs" />
      <Compile Include="Assets\Scripts\Game\Camera2D.cs" />
      <Compile Include="Assets\Scripts\Game\DamageMask.cs" />
      <Compile Include="Assets\Scripts\Game\Extensions.cs" />
